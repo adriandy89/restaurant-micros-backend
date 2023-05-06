@@ -1,7 +1,7 @@
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
 
 @Controller()
@@ -15,12 +15,18 @@ export class UserController {
 
   @MessagePattern(UserMsg.FIND_ALL)
   findAll() {
+    console.log('from user');
     return this.userService.findAll();
   }
 
   @MessagePattern(UserMsg.FIND_ONE)
-  findOne(@Payload() id: string) {
-    return this.userService.findOne(id);
+  async findOne(@Payload() id: string) {
+    const found = await this.userService.findOne(id);
+    if (!found) {
+      console.log('RpcException...');
+      throw new RpcException({ code: 404, message: 'Not Found' });
+    }
+    return found;
   }
   @MessagePattern(UserMsg.UPDATE)
   update(@Payload() payload: any) {

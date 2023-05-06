@@ -8,11 +8,11 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { UserDTO } from './dto/user.dto';
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
+import { UserDTO } from 'libs/common/dtos/user.dto';
 
 @ApiTags('user')
 @UseGuards(JwtAuthGuard)

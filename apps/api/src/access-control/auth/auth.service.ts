@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
-import { UserDTO } from '../user/dto/user.dto';
+import { UserDTO } from '../../../../../libs/common/dtos/user.dto';
 import { firstValueFrom } from 'rxjs';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
 

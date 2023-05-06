@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionFilter } from './access-control/common/filters/http-exception.filter';
+import { AllExceptionFilter } from './access-control/common/filters/exception.filter';
 import { TimeoutInterceptor } from './access-control/common/interceptors/timeout.interceptor';
 
 async function bootstrap() {
