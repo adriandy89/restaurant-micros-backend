@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { ORGANIZATION } from 'libs/common/models/models';
@@ -13,17 +12,8 @@ export class OrganizationService {
     private readonly model: Model<IOrganization>,
   ) {}
 
-  async checkPassword(password: string, passwordDB: string): Promise<boolean> {
-    return await bcrypt.compare(password, passwordDB);
-  }
-
   async findByOrganizationname(organizationname: string) {
     return await this.model.findOne({ organizationname });
-  }
-
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
   }
 
   async create(organizationDTO: OrganizationDTO): Promise<IOrganization> {

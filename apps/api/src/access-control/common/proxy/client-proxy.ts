@@ -11,42 +11,12 @@ import { RabbitMQ } from 'libs/common/constants/rabbitmq.constants';
 export class ClientProxyAPI {
   constructor(private readonly config: ConfigService) {}
 
-  clientProxyUsers(): ClientProxy {
+  clientProxyAccessControl(): ClientProxy {
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
         urls: [this.config.get('AMQP_URL')],
-        queue: RabbitMQ.UserQueue,
-      },
-    });
-  }
-
-  clientProxyRoles(): ClientProxy {
-    return ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: [this.config.get('AMQP_URL')],
-        queue: RabbitMQ.RoleQueue,
-      },
-    });
-  }
-
-  clientProxyPermissions(): ClientProxy {
-    return ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: [this.config.get('AMQP_URL')],
-        queue: RabbitMQ.PermissionQueue,
-      },
-    });
-  }
-
-  clientProxyOrganizations(): ClientProxy {
-    return ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: [this.config.get('AMQP_URL')],
-        queue: RabbitMQ.OrganizationQueue,
+        queue: RabbitMQ.AccessControlQueue,
       },
     });
   }

@@ -1,8 +1,5 @@
 export enum RabbitMQ {
-  UserQueue = 'users',
-  RoleQueue = 'roles',
-  PermissionQueue = 'permissions',
-  OrganizationQueue = 'organizations',
+  AccessControlQueue = 'access-control',
 }
 
 export enum UserMsg {

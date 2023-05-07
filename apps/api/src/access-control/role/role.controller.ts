@@ -20,34 +20,35 @@ import { RoleDTO } from 'libs/common/dtos/role.dto';
 @Controller('role')
 export class RoleController {
   constructor(private readonly clientProxy: ClientProxyAPI) {}
-  private clientProxyRole = this.clientProxy.clientProxyRoles();
+  private clientProxyAccessControl =
+    this.clientProxy.clientProxyAccessControl();
 
   @Post()
   create(@Body() roleDTO: RoleDTO) {
-    return this.clientProxyRole.send(RoleMsg.CREATE, roleDTO);
+    return this.clientProxyAccessControl.send(RoleMsg.CREATE, roleDTO);
   }
 
   @Get()
   findAll() {
-    return this.clientProxyRole.send(RoleMsg.FIND_ALL, '');
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ALL, '');
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   findOne(@Param('id') id: string) {
-    return this.clientProxyRole.send(RoleMsg.FIND_ONE, id);
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ONE, id);
   }
 
   @Put(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @ApiBody({})
   update(@Param('id') id: string, @Body() roleDTO: Partial<RoleDTO>) {
-    return this.clientProxyRole.send(RoleMsg.UPDATE, { id, roleDTO });
+    return this.clientProxyAccessControl.send(RoleMsg.UPDATE, { id, roleDTO });
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   delete(@Param('id') id) {
-    return this.clientProxyRole.send(RoleMsg.DELETE, id);
+    return this.clientProxyAccessControl.send(RoleMsg.DELETE, id);
   }
 }

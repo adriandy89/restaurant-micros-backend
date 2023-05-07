@@ -12,9 +12,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private _clientProxyUser = this.clientProxy.clientProxyUsers();
+  private clientProxyAccessControl =
+    this.clientProxy.clientProxyAccessControl();
   async validateUser(username: string, password: string): Promise<any> {
-    const r = this._clientProxyUser.send(UserMsg.VALID_USER, {
+    const r = this.clientProxyAccessControl.send(UserMsg.VALID_USER, {
       username,
       password,
     });
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   async signUp(userDTO: UserDTO) {
-    return await this._clientProxyUser
+    return await this.clientProxyAccessControl
       .send(UserMsg.CREATE, userDTO)
       .toPromise();
   }

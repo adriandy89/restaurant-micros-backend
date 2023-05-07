@@ -3,6 +3,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { OrganizationMsg } from 'libs/common/constants/rabbitmq.constants';
 import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
+import { handleError } from 'libs/common/utils/error-handler-micro';
 
 @Controller()
 export class OrganizationController {
@@ -10,7 +11,13 @@ export class OrganizationController {
 
   @MessagePattern(OrganizationMsg.CREATE)
   create(@Payload() organizationDTO: OrganizationDTO) {
-    return this.organizationService.create(organizationDTO);
+    return this.organizationService.create(organizationDTO).catch((error) => {
+      handleError(
+        error.code === 11000
+          ? { code: 409, message: 'Duplicate, already exist' }
+          : undefined,
+      );
+    });
   }
 
   @MessagePattern(OrganizationMsg.FIND_ALL)
@@ -20,9 +27,14 @@ export class OrganizationController {
   }
 
   @MessagePattern(OrganizationMsg.FIND_ONE)
-  findOne(@Payload() id: string) {
-    return this.organizationService.findOne(id);
+  async findOne(@Payload() id: string) {
+    const found = await this.organizationService.findOne(id);
+    if (!found) {
+      handleError({ code: 404, message: 'Not Found' });
+    }
+    return found;
   }
+
   @MessagePattern(OrganizationMsg.UPDATE)
   update(@Payload() payload: any) {
     return this.organizationService.update(payload.id, payload.organizationDTO);

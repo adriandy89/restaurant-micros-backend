@@ -20,34 +20,35 @@ import { UserDTO } from 'libs/common/dtos/user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly clientProxy: ClientProxyAPI) {}
-  private clientProxyUser = this.clientProxy.clientProxyUsers();
+  private clientProxyAccessControl =
+    this.clientProxy.clientProxyAccessControl();
 
   @Post()
   create(@Body() userDTO: UserDTO) {
-    return this.clientProxyUser.send(UserMsg.CREATE, userDTO);
+    return this.clientProxyAccessControl.send(UserMsg.CREATE, userDTO);
   }
 
   @Get()
   findAll() {
-    return this.clientProxyUser.send(UserMsg.FIND_ALL, '');
+    return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, '');
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   findOne(@Param('id') id: string) {
-    return this.clientProxyUser.send(UserMsg.FIND_ONE, id);
+    return this.clientProxyAccessControl.send(UserMsg.FIND_ONE, id);
   }
 
   @Put(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @ApiBody({})
   update(@Param('id') id: string, @Body() userDTO: Partial<UserDTO>) {
-    return this.clientProxyUser.send(UserMsg.UPDATE, { id, userDTO });
+    return this.clientProxyAccessControl.send(UserMsg.UPDATE, { id, userDTO });
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   delete(@Param('id') id) {
-    return this.clientProxyUser.send(UserMsg.DELETE, id);
+    return this.clientProxyAccessControl.send(UserMsg.DELETE, id);
   }
 }

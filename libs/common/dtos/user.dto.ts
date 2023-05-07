@@ -3,6 +3,7 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsEmail,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -30,10 +31,10 @@ export class UserDTO {
   readonly active?: boolean;
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsMongoId()
   readonly organization: string;
-  @IsString({ each: true })
-  @ArrayMinSize(1)
-  @ArrayMaxSize(10)
-  readonly roles: string[];
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  readonly role: string;
 }

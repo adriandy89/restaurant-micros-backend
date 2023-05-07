@@ -2,7 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   ArrayMinSize,
+  IsArray,
+  IsMongoId,
   IsNotEmpty,
+  IsObject,
   IsString,
 } from 'class-validator';
 
@@ -13,10 +16,13 @@ export class RoleDTO {
   readonly name: string;
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsMongoId()
   readonly organization: string;
-  @IsString({ each: true })
-  @ArrayMinSize(1)
-  @ArrayMaxSize(10)
-  readonly permissions: string[];
+  @ApiProperty()
+  @IsObject()
+  @IsNotEmpty()
+  readonly permissions: {
+    administration: string[];
+    products: string[];
+  };
 }

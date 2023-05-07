@@ -1,8 +1,9 @@
 import { UserService } from './user.service';
 import { UserDTO } from './dto/user.dto';
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
+import { handleError } from 'libs/common/utils/error-handler-micro';
 
 @Controller()
 export class UserController {
@@ -10,12 +11,17 @@ export class UserController {
 
   @MessagePattern(UserMsg.CREATE)
   create(@Payload() userDTO: UserDTO) {
-    return this.userService.create(userDTO);
+    return this.userService.create(userDTO).catch((error) => {
+      handleError(
+        error.code === 11000
+          ? { code: 409, message: 'Duplicate, already exist' }
+          : undefined,
+      );
+    });
   }
 
   @MessagePattern(UserMsg.FIND_ALL)
   findAll() {
-    console.log('from user');
     return this.userService.findAll();
   }
 
@@ -23,8 +29,7 @@ export class UserController {
   async findOne(@Payload() id: string) {
     const found = await this.userService.findOne(id);
     if (!found) {
-      console.log('RpcException...');
-      throw new RpcException({ code: 404, message: 'Not Found' });
+      handleError({ code: 404, message: 'Not Found' });
     }
     return found;
   }

@@ -20,11 +20,12 @@ import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly clientProxy: ClientProxyAPI) {}
-  private clientProxyOrganization = this.clientProxy.clientProxyOrganizations();
+  private clientProxyAccessControl =
+    this.clientProxy.clientProxyAccessControl();
 
   @Post()
   create(@Body() organizationDTO: OrganizationDTO) {
-    return this.clientProxyOrganization.send(
+    return this.clientProxyAccessControl.send(
       OrganizationMsg.CREATE,
       organizationDTO,
     );
@@ -32,13 +33,13 @@ export class OrganizationController {
 
   @Get()
   findAll() {
-    return this.clientProxyOrganization.send(OrganizationMsg.FIND_ALL, '');
+    return this.clientProxyAccessControl.send(OrganizationMsg.FIND_ALL, '');
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   findOne(@Param('id') id: string) {
-    return this.clientProxyOrganization.send(OrganizationMsg.FIND_ONE, id);
+    return this.clientProxyAccessControl.send(OrganizationMsg.FIND_ONE, id);
   }
 
   @Put(':id')
@@ -48,7 +49,7 @@ export class OrganizationController {
     @Param('id') id: string,
     @Body() organizationDTO: Partial<OrganizationDTO>,
   ) {
-    return this.clientProxyOrganization.send(OrganizationMsg.UPDATE, {
+    return this.clientProxyAccessControl.send(OrganizationMsg.UPDATE, {
       id,
       organizationDTO,
     });
@@ -57,6 +58,6 @@ export class OrganizationController {
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   delete(@Param('id') id) {
-    return this.clientProxyOrganization.send(OrganizationMsg.DELETE, id);
+    return this.clientProxyAccessControl.send(OrganizationMsg.DELETE, id);
   }
 }
