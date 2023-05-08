@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ROLE } from '@app/libs/common/models/models';
+import { ROLE } from '@app/libs/common/models/db.model';
 import { IRole } from '@app/libs/common/interfaces/role.interface';
 import { RoleDTO } from '@app/libs/common/dtos/role.dto';
 
