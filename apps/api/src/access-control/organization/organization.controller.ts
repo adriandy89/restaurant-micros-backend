@@ -13,6 +13,7 @@ import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OrganizationMsg } from '@app/libs/common/constants/rabbitmq.constants';
 import { OrganizationDTO } from '@app/libs/common/dtos/organization.dto';
+import { SAdminGuard } from '../auth/guards/sadmin.guard';
 
 @ApiTags('organization')
 @UseGuards(JwtAuthGuard)
@@ -24,6 +25,7 @@ export class OrganizationController {
     this.clientProxy.clientProxyAccessControl();
 
   @Post()
+  @UseGuards(SAdminGuard)
   create(@Body() organizationDTO: OrganizationDTO) {
     return this.clientProxyAccessControl.send(
       OrganizationMsg.CREATE,
@@ -32,12 +34,14 @@ export class OrganizationController {
   }
 
   @Get()
+  @UseGuards(SAdminGuard)
   findAll() {
     return this.clientProxyAccessControl.send(OrganizationMsg.FIND_ALL, '');
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
+  @UseGuards(SAdminGuard)
   findOne(@Param('id') id: string) {
     return this.clientProxyAccessControl.send(OrganizationMsg.FIND_ONE, id);
   }
@@ -45,6 +49,7 @@ export class OrganizationController {
   @Put(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @ApiBody({})
+  @UseGuards(SAdminGuard)
   update(
     @Param('id') id: string,
     @Body() organizationDTO: Partial<OrganizationDTO>,
@@ -57,6 +62,7 @@ export class OrganizationController {
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
+  @UseGuards(SAdminGuard)
   delete(@Param('id') id) {
     return this.clientProxyAccessControl.send(OrganizationMsg.DELETE, id);
   }

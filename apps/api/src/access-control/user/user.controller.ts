@@ -1,8 +1,10 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Post,
   Put,
@@ -26,12 +28,16 @@ export class UserController {
     this.clientProxy.clientProxyAccessControl();
 
   @Post()
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
+  @UseGuards(PermissionsGuard)
   create(@Body() userDTO: UserDTO) {
+    if (userDTO.username == 'sadmin')
+      throw new ConflictException('Duplicate, already exist');
     return this.clientProxyAccessControl.send(UserMsg.CREATE, userDTO);
   }
 
   @Get()
-  @Permissions({ administration: ['create', 'list'], products: ['list'] })
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
   findAll() {
     return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, '');
@@ -39,6 +45,8 @@ export class UserController {
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
+  @UseGuards(PermissionsGuard)
   findOne(@Param('id') id: string) {
     return this.clientProxyAccessControl.send(UserMsg.FIND_ONE, id);
   }
@@ -46,12 +54,18 @@ export class UserController {
   @Put(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @ApiBody({})
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
+  @UseGuards(PermissionsGuard)
   update(@Param('id') id: string, @Body() userDTO: Partial<UserDTO>) {
+    if (userDTO.username == 'sadmin')
+      throw new ConflictException('Duplicate, already exist');
     return this.clientProxyAccessControl.send(UserMsg.UPDATE, { id, userDTO });
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
+  @UseGuards(PermissionsGuard)
   delete(@Param('id') id) {
     return this.clientProxyAccessControl.send(UserMsg.DELETE, id);
   }

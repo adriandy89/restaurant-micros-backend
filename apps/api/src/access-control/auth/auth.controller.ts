@@ -3,6 +3,7 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserDTO } from '@app/libs/common/dtos/user.dto';
+import { handleError } from '@app/libs/common/utils/error-handler-micro';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -25,6 +26,8 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() userDTO: UserDTO) {
+    if (userDTO.username == 'sadmin')
+      handleError({ code: 409, message: 'Duplicate, already exist' });
     return await this.authService.signUp(userDTO);
   }
 }
