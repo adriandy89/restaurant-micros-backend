@@ -1,5 +1,5 @@
-import { PERMISSIONS } from 'libs/common/constants/module-access.constants';
-import { ORGANIZATION } from 'libs/common/models/models';
+import { PERMISSIONS } from '@app/libs/common/constants/module-access.constants';
+import { ORGANIZATION } from '@app/libs/common/models/models';
 import { Schema, Types } from 'mongoose';
 
 export const RoleSchema = new Schema(

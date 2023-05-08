@@ -1,9 +1,9 @@
 import { UserService } from './user.service';
-import { UserDTO } from './dto/user.dto';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
-import { handleError } from 'libs/common/utils/error-handler-micro';
+import { UserMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { handleError } from '@app/libs/common/utils/error-handler-micro';
+import { UserDTO } from '@app/libs/common/dtos/user.dto';
 
 @Controller()
 export class UserController {

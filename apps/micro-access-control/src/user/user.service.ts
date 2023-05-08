@@ -1,10 +1,10 @@
-import { UserDTO } from './dto/user.dto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { USER } from 'libs/common/models/models';
-import { IUser } from 'libs/common/interfaces/user.interface';
+import { USER } from '@app/libs/common/models/models';
+import { IUser } from '@app/libs/common/interfaces/user.interface';
+import { UserDTO } from '@app/libs/common/dtos/user.dto';
 
 @Injectable()
 export class UserService {
@@ -15,7 +15,13 @@ export class UserService {
   }
 
   async findByUsername(username: string) {
-    return await this.model.findOne({ username });
+    return await this.model
+      .findOne({ username })
+      .populate({
+        path: 'role',
+        select: 'permissions _id',
+      })
+      .exec();
   }
 
   async hashPassword(password: string): Promise<string> {
@@ -30,7 +36,14 @@ export class UserService {
   }
 
   async findAll(): Promise<IUser[]> {
-    return await this.model.find().select('-password -createdA -__v').exec();
+    return await this.model
+      .find()
+      .select('-password -createdA -__v')
+      .populate({
+        path: 'role',
+        select: 'permissions -_id',
+      })
+      .exec();
   }
 
   async findOne(id: string): Promise<IUser> {

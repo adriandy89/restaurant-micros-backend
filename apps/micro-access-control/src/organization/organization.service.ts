@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { ORGANIZATION } from 'libs/common/models/models';
-import { IOrganization } from 'libs/common/interfaces/organization.interface';
-import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
+import { ORGANIZATION } from '@app/libs/common/models/models';
+import { IOrganization } from '@app/libs/common/interfaces/organization.interface';
+import { OrganizationDTO } from '@app/libs/common/dtos/organization.dto';
 
 @Injectable()
 export class OrganizationService {

@@ -11,8 +11,8 @@ import {
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RoleMsg } from 'libs/common/constants/rabbitmq.constants';
-import { RoleDTO } from 'libs/common/dtos/role.dto';
+import { RoleMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { RoleDTO } from '@app/libs/common/dtos/role.dto';
 
 @ApiTags('role')
 @UseGuards(JwtAuthGuard)

@@ -3,7 +3,7 @@ import { RoleService } from './role.service';
 import { RoleSchema } from './schema/role.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RoleController } from './role.controller';
-import { ROLE } from 'libs/common/models/models';
+import { ROLE } from '@app/libs/common/models/models';
 
 @Module({
   imports: [

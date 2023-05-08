@@ -11,8 +11,8 @@ import {
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { OrganizationMsg } from 'libs/common/constants/rabbitmq.constants';
-import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
+import { OrganizationMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { OrganizationDTO } from '@app/libs/common/dtos/organization.dto';
 
 @ApiTags('organization')
 @UseGuards(JwtAuthGuard)

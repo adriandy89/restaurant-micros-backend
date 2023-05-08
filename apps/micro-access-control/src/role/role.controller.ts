@@ -1,9 +1,9 @@
 import { RoleService } from './role.service';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RoleMsg } from 'libs/common/constants/rabbitmq.constants';
-import { RoleDTO } from 'libs/common/dtos/role.dto';
-import { handleError } from 'libs/common/utils/error-handler-micro';
+import { RoleMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { RoleDTO } from '@app/libs/common/dtos/role.dto';
+import { handleError } from '@app/libs/common/utils/error-handler-micro';
 
 @Controller()
 export class RoleController {

@@ -1,9 +1,9 @@
+import { handleError } from '@app/libs/common/utils/error-handler-micro';
 import { OrganizationService } from './organization.service';
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { OrganizationMsg } from 'libs/common/constants/rabbitmq.constants';
-import { OrganizationDTO } from 'libs/common/dtos/organization.dto';
-import { handleError } from 'libs/common/utils/error-handler-micro';
+import { OrganizationMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { OrganizationDTO } from '@app/libs/common/dtos/organization.dto';
 
 @Controller()
 export class OrganizationController {

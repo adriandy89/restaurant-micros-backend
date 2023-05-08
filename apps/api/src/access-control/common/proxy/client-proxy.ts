@@ -5,7 +5,7 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
-import { RabbitMQ } from 'libs/common/constants/rabbitmq.constants';
+import { RabbitMQ } from '@app/libs/common/constants/rabbitmq.constants';
 
 @Injectable()
 export class ClientProxyAPI {

@@ -11,8 +11,10 @@ import {
 import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
-import { UserDTO } from 'libs/common/dtos/user.dto';
+import { UserMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { UserDTO } from '@app/libs/common/dtos/user.dto';
+import { Permissions } from '../auth/decorators/permission.decorator';
+import { PermissionsGuard } from '../auth/guards/permission.guard';
 
 @ApiTags('user')
 @UseGuards(JwtAuthGuard)
@@ -29,6 +31,8 @@ export class UserController {
   }
 
   @Get()
+  @Permissions({ administration: ['create', 'list'], products: ['list'] })
+  @UseGuards(PermissionsGuard)
   findAll() {
     return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, '');
   }

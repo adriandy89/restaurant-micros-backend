@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { MicroAccessControlModule } from './micro-access-control.module';
-import { RabbitMQ } from 'libs/common/constants/rabbitmq.constants';
+import { RabbitMQ } from '@app/libs/common/constants/rabbitmq.constants';
 import * as dotenv from 'dotenv';
 
 async function bootstrap() {

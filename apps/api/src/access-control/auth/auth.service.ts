@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
-import { UserDTO } from '../../../../../libs/common/dtos/user.dto';
 import { firstValueFrom } from 'rxjs';
-import { UserMsg } from 'libs/common/constants/rabbitmq.constants';
+import { UserMsg } from '@app/libs/common/constants/rabbitmq.constants';
+import { UserDTO } from '@app/libs/common/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,9 +29,10 @@ export class AuthService {
   async signIn(user: any) {
     const payload = {
       username: user.username,
-      sub: user._id,
+      userId: user._id,
+      permissions: user.role.permissions,
+      organization: user.organization,
     };
-
     return { access_token: this.jwtService.sign(payload) };
   }
 

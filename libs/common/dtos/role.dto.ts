@@ -1,13 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ArrayMaxSize,
-  ArrayMinSize,
-  IsArray,
-  IsMongoId,
-  IsNotEmpty,
-  IsObject,
-  IsString,
-} from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsObject, IsString } from 'class-validator';
 
 export class RoleDTO {
   @ApiProperty()

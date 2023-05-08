@@ -1,4 +1,4 @@
-import { ORGANIZATION, ROLE } from 'libs/common/models/models';
+import { ORGANIZATION, ROLE } from '@app/libs/common/models/models';
 import { Schema, Types } from 'mongoose';
 
 export const UserSchema = new Schema(
