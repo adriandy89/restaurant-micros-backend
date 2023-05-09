@@ -30,9 +30,7 @@ export class UserController {
   }
 
   @MessagePattern(UserMsg.FIND_ONE)
-  async findOne(
-    @Payload() payload: { id: string; userDTO: UserDTO; meta: IMeta },
-  ) {
+  async findOne(@Payload() payload: { id: string; meta: IMeta }) {
     const found = await this.userService.findOne(payload.id, payload.meta);
     if (!found) {
       handleError({ code: 404, message: 'Not Found' });

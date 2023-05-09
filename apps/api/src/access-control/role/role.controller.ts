@@ -15,6 +15,8 @@ import { RoleMsg } from '@app/libs/common/constants/rabbitmq.constants';
 import { RoleDTO } from '@app/libs/common/dtos/role.dto';
 import { Permissions } from '../auth/decorators/permission.decorator';
 import { PermissionsGuard } from '../auth/guards/permission.guard';
+import { GetUserInfo } from '../auth/decorators/get-user-info.decorator';
+import { IMeta } from '@app/libs/common/interfaces/metadata.interface';
 
 @ApiTags('role')
 @UseGuards(JwtAuthGuard)
@@ -28,21 +30,26 @@ export class RoleController {
   @Post()
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  create(@Body() roleDTO: RoleDTO) {
-    return this.clientProxyAccessControl.send(RoleMsg.CREATE, roleDTO);
+  create(@Body() roleDTO: RoleDTO, @GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(RoleMsg.CREATE, {
+      roleDTO,
+      meta,
+    });
   }
 
   @Get()
-  findAll() {
-    return this.clientProxyAccessControl.send(RoleMsg.FIND_ALL, '');
+  @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
+  @UseGuards(PermissionsGuard)
+  findAll(@GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ALL, { meta });
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  findOne(@Param('id') id: string) {
-    return this.clientProxyAccessControl.send(RoleMsg.FIND_ONE, id);
+  findOne(@Param('id') id: string, @GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(RoleMsg.FIND_ONE, { id, meta });
   }
 
   @Put(':id')
@@ -50,15 +57,23 @@ export class RoleController {
   @ApiBody({})
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  update(@Param('id') id: string, @Body() roleDTO: Partial<RoleDTO>) {
-    return this.clientProxyAccessControl.send(RoleMsg.UPDATE, { id, roleDTO });
+  update(
+    @Param('id') id: string,
+    @Body() roleDTO: Partial<RoleDTO>,
+    @GetUserInfo() meta: IMeta,
+  ) {
+    return this.clientProxyAccessControl.send(RoleMsg.UPDATE, {
+      id,
+      roleDTO,
+      meta,
+    });
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  delete(@Param('id') id) {
-    return this.clientProxyAccessControl.send(RoleMsg.DELETE, id);
+  delete(@Param('id') id, @GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(RoleMsg.DELETE, { id, meta });
   }
 }
