@@ -41,9 +41,9 @@ export class AuthService {
     return { access_token: this.jwtService.sign(payload) };
   }
 
-  async signUp(userDTO: UserDTO) {
-    return await this.clientProxyAccessControl
-      .send(UserMsg.CREATE, userDTO)
-      .toPromise();
-  }
+  // async signUp(userDTO: UserDTO) {
+  //   return await this.clientProxyAccessControl
+  //     .send(UserMsg.CREATE, userDTO)
+  //     .toPromise();
+  // }
 }

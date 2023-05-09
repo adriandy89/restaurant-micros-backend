@@ -24,10 +24,10 @@ export class AuthController {
     return await this.authService.signIn(req.user);
   }
 
-  @Post('signup')
-  async signUp(@Body() userDTO: UserDTO) {
-    if (userDTO.username == 'sadmin')
-      handleError({ code: 409, message: 'Duplicate, already exist' });
-    return await this.authService.signUp(userDTO);
-  }
+  // @Post('signup')
+  // async signUp(@Body() userDTO: UserDTO) {
+  //   if (userDTO.username == 'sadmin')
+  //     handleError({ code: 409, message: 'Duplicate, already exist' });
+  //   return await this.authService.signUp(userDTO);
+  // }
 }

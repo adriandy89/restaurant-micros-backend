@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   Param,
   Post,
   Put,
@@ -17,6 +16,8 @@ import { UserMsg } from '@app/libs/common/constants/rabbitmq.constants';
 import { UserDTO } from '@app/libs/common/dtos/user.dto';
 import { Permissions } from '../auth/decorators/permission.decorator';
 import { PermissionsGuard } from '../auth/guards/permission.guard';
+import { GetUserInfo } from '../auth/decorators/get-user-info.decorator';
+import { IMeta } from '@app/libs/common/interfaces/metadata.interface';
 
 @ApiTags('user')
 @UseGuards(JwtAuthGuard)
@@ -30,25 +31,29 @@ export class UserController {
   @Post()
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  create(@Body() userDTO: UserDTO) {
+  create(@Body() userDTO: UserDTO, @GetUserInfo() meta: IMeta) {
     if (userDTO.username == 'sadmin')
       throw new ConflictException('Duplicate, already exist');
-    return this.clientProxyAccessControl.send(UserMsg.CREATE, userDTO);
+    return this.clientProxyAccessControl.send(UserMsg.CREATE, {
+      userDTO,
+      meta,
+    });
   }
 
   @Get()
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  findAll() {
-    return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, '');
+  findAll(@GetUserInfo() meta: IMeta) {
+    console.log(meta);
+    return this.clientProxyAccessControl.send(UserMsg.FIND_ALL, { meta });
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  findOne(@Param('id') id: string) {
-    return this.clientProxyAccessControl.send(UserMsg.FIND_ONE, id);
+  findOne(@Param('id') id: string, @GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(UserMsg.FIND_ONE, { id, meta });
   }
 
   @Put(':id')
@@ -56,17 +61,25 @@ export class UserController {
   @ApiBody({})
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  update(@Param('id') id: string, @Body() userDTO: Partial<UserDTO>) {
+  update(
+    @Param('id') id: string,
+    @Body() userDTO: Partial<UserDTO>,
+    @GetUserInfo() meta: IMeta,
+  ) {
     if (userDTO.username == 'sadmin')
       throw new ConflictException('Duplicate, already exist');
-    return this.clientProxyAccessControl.send(UserMsg.UPDATE, { id, userDTO });
+    return this.clientProxyAccessControl.send(UserMsg.UPDATE, {
+      id,
+      userDTO,
+      meta,
+    });
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: String, required: true })
   @Permissions({ administration: ['list', 'create', 'update', 'delete'] })
   @UseGuards(PermissionsGuard)
-  delete(@Param('id') id) {
-    return this.clientProxyAccessControl.send(UserMsg.DELETE, id);
+  delete(@Param('id') id: string, @GetUserInfo() meta: IMeta) {
+    return this.clientProxyAccessControl.send(UserMsg.DELETE, { id, meta });
   }
 }

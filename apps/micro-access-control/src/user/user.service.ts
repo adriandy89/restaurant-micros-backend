@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { USER } from '@app/libs/common/models/db.model';
 import { IUser } from '@app/libs/common/interfaces/user.interface';
 import { UserDTO } from '@app/libs/common/dtos/user.dto';
+import { IMeta } from '@app/libs/common/interfaces/metadata.interface';
 
 @Injectable()
 export class UserService {
@@ -29,38 +30,66 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
 
-  async create(userDTO: UserDTO): Promise<IUser> {
+  async create(userDTO: UserDTO, meta: IMeta): Promise<IUser> {
     const hash = await this.hashPassword(userDTO.password);
-    const newUser = new this.model({ ...userDTO, password: hash });
+    const newUser = new this.model({
+      ...userDTO,
+      organization: meta.organization ?? userDTO.organization,
+      password: hash,
+    });
     return await newUser.save();
   }
 
-  async findAll(): Promise<IUser[]> {
+  async findAll(meta: IMeta): Promise<IUser[]> {
+    let query = this.model.find().select('-password -createdAt -__v');
+    if (meta.organization) {
+      query = query.find({ organization: meta.organization });
+    }
+    return await query.exec();
+  }
+
+  async findOne(id: string, meta: IMeta): Promise<IUser> {
+    if (meta.organization) {
+      return await this.model
+        .findOne({ id, organization: meta.organization })
+        .select('-password -createdAt -__v')
+        .exec();
+    }
     return await this.model
-      .find()
-      .select('-password -createdA -__v')
-      .populate({
-        path: 'role',
-        select: 'permissions -_id',
-      })
+      .findById(id)
+      .select('-password -createdAt -__v')
       .exec();
   }
 
-  async findOne(id: string): Promise<IUser> {
-    return await this.model.findById(id);
-  }
-
-  async update(id: string, userDTO: UserDTO): Promise<IUser> {
+  async update(id: string, userDTO: UserDTO, meta: IMeta): Promise<IUser> {
     if (!!userDTO.password) {
       const hash = await this.hashPassword(userDTO.password);
       const user = { ...userDTO, password: hash };
       return await this.model.findByIdAndUpdate(id, user);
     }
-    return await this.model.findByIdAndUpdate(id, userDTO);
+    if (meta.organization) {
+      return await this.model
+        .findOneAndUpdate(
+          { _id: id, organization: meta.organization },
+          userDTO,
+          { new: true },
+        )
+        .exec();
+    }
+    return await this.model.findByIdAndUpdate(id, userDTO, { new: true });
   }
 
-  async delete(id: string) {
-    await this.model.findByIdAndDelete(id);
+  async delete(id: string, meta: IMeta) {
+    if (meta.organization) {
+      await this.model
+        .findOneAndDelete({
+          _id: id,
+          organization: meta.organization,
+        })
+        .exec();
+    } else {
+      await this.model.findByIdAndDelete(id);
+    }
     return {
       status: HttpStatus.OK,
       msg: 'Deleted',
