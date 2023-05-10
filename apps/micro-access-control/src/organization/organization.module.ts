@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
-import { OrganizationSchema } from './schema/organization.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrganizationController } from './organization.controller';
 import { ORGANIZATION } from '@app/libs/common/models/db.model';
+import { OrganizationSchema } from '@app/libs/common/schemas/organization.schema';
 
 @Module({
   imports: [
