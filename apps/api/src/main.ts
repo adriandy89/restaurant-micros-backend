@@ -10,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('bootstrap');
   const configService = app.get(ConfigService);
+  const environment = configService.get('NODE_ENV');
   const port = configService.get('PORT') || 3000;
   const cors = configService.get('CORS') === 'true';
   if (cors) {
@@ -25,19 +26,21 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TimeoutInterceptor());
   app.setGlobalPrefix('api/v1');
 
-  const config = new DocumentBuilder()
-    .setTitle('API')
-    .setDescription('Endpoints - API - Gateway')
-    .addBearerAuth()
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/v1/docs', app, document, {
-    swaggerOptions: {
-      filter: true,
-      persistAuthorization: true,
-    },
-  });
+  if (environment === 'develop') {
+    const config = new DocumentBuilder()
+      .setTitle('API')
+      .setDescription('Endpoints - API - Gateway')
+      .addBearerAuth()
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/v1/docs', app, document, {
+      swaggerOptions: {
+        filter: true,
+        persistAuthorization: true,
+      },
+    });
+  }
 
   await app.listen(port, () => {
     logger.verbose(`CORS Enabled: ${cors}`);
