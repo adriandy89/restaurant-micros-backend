@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientProxyAPI } from '../common/proxy/client-proxy';
 import { firstValueFrom } from 'rxjs';
 import { UserMsg } from '@app/libs/common/constants/rabbitmq.constants';
-import { UserDTO } from '@app/libs/common/dtos/user.dto';
 
 @Injectable()
 export class AuthService {

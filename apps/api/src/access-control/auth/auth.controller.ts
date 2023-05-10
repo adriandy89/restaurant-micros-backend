@@ -1,9 +1,7 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { UserDTO } from '@app/libs/common/dtos/user.dto';
-import { handleError } from '@app/libs/common/utils/error-handler-micro';
 
 @ApiTags('Authentication')
 @Controller('auth')
