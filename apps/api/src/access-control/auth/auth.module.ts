@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from '../user/user.module';
 import { ProxyModule } from '../common/proxy/proxy.module';
+import { WsGateway } from './ws.gateway';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { ProxyModule } from '../common/proxy/proxy.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, WsGateway],
 })
 export class AuthModule {}
